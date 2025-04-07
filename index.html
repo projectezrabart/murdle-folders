@@ -76,7 +76,7 @@
       const verdicts = shuffle(["Guilty", "Innocent", "Innocent", "Innocent"]);
 
       const sets = people.map((p, i) => [p, places[i], weapons[i], verdicts[i]]);
-      const labels = ["Person", "Place", "Weapon", "Verdict"];
+      const labels = ["Suspect", "Place", "Weapon", "Verdict"];
 
       const gameState = { sets, labels };
 
