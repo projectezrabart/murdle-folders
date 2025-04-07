@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Murdle Folders</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 10px;
+    }
+    h2 {
+      font-size: 1rem;
+    }
+    .folder {
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      padding: 10px;
+      margin: 10px;
+    }
+    .button-group {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    button {
+      font-size: 0.9rem;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      color: white;
+    }
+    .Person { background-color: lightblue; color: black; }
+    .Place { background-color: lightgreen; color: black; }
+    .Weapon { background-color: lightcoral; color: black; }
+    .Verdict { background-color: gray; }
+    @media (min-width: 600px) {
+      .folders {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .folder {
+        width: 45%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Wild Card: You can look at any two pieces of information</h2>
+  <h2>I placed a tick: You can look at any two pieces of information in different folders</h2>
+
+  <div class="folders" id="folders"></div>
+
+  <button id="newGameBtn">New Game</button>
+
+  <script>
+    const newGameButton = document.getElementById("newGameBtn");
+    const container = document.getElementById("folders");
+
+    // If there's saved game data in localStorage, load it; otherwise, generate a new game
+    if (localStorage.getItem('gameState')) {
+      const savedState = JSON.parse(localStorage.getItem('gameState'));
+      restoreGameState(savedState);
+    }
+
+    newGameButton.onclick = () => {
+      generateNewGame();
+      alert("New Folders have been generated");
+    };
+
+    function generateNewGame() {
+      const people = shuffle(["Silverton the Legend", "Dame Obsidian", "Major Red", "Vice President Mauve"]);
+      const places = shuffle(["English Village", "Havelock North", "Hastings", "Napier"]);
+      const weapons = shuffle(["Rocket Pants", "Dishwasher", "Unknown", "Cats"]);
+      const verdicts = shuffle(["Guilty", "Innocent", "Innocent", "Innocent"]);
+
+      const sets = people.map((p, i) => [p, places[i], weapons[i], verdicts[i]]);
+      const labels = ["Person", "Place", "Weapon", "Verdict"];
+
+      const gameState = { sets, labels };
+
+      // Save the game state to localStorage
+      localStorage.setItem('gameState', JSON.stringify(gameState));
+
+      // Generate the folders and buttons
+      restoreGameState(gameState);
+    }
+
+    function restoreGameState(gameState) {
+      container.innerHTML = ''; // Clear previous folders
+
+      gameState.sets.forEach((set, i) => {
+        const folder = document.createElement("div");
+        folder.className = "folder";
+        folder.innerHTML = `<h3>Folder ${i + 1}</h3>`;
+
+        const group = document.createElement("div");
+        group.className = "button-group";
+
+        set.forEach((item, j) => {
+          const btn = document.createElement("button");
+          const label = gameState.labels[j];
+          btn.className = label;
+          btn.textContent = label;
+          btn.onclick = () => {
+            const originalText = btn.textContent;
+            btn.textContent = item;
+            btn.disabled = true;
+            setTimeout(() => {
+              btn.textContent = originalText;
+              btn.disabled = false;
+            }, 1500);
+          };
+          group.appendChild(btn);
+        });
+
+        folder.appendChild(group);
+        container.appendChild(folder);
+      });
+    }
+
+    function shuffle(array) {
+      return array.sort(() => Math.random() - 0.5);
+    }
+  </script>
+
+</body>
+</html>
