@@ -50,9 +50,6 @@
 </head>
 <body>
 
-  <h2>Wild Card: You can look at any two pieces of information</h2>
-  <h2>I placed a tick: You can look at any two pieces of information in different folders</h2>
-
   <div class="folders" id="folders"></div>
 
   <button id="newGameBtn">New Game</button>
@@ -74,8 +71,8 @@
 
     function generateNewGame() {
       const people = shuffle(["Silverton the Legend", "Dame Obsidian", "Major Red", "Vice President Mauve"]);
-      const places = shuffle(["English Village", "Aeiges", "Hastings", "Napier"]);
-      const weapons = shuffle(["Rocket Pants", "Dishwasher", "Unknown", "Cats"]);
+      const places = shuffle(["English Village", "Aeiges", "Mystery Island", "Napier"]);
+      const weapons = shuffle(["Rocket Pants", "Spy Satellite", "Unknown", "Cats"]);
       const verdicts = shuffle(["Guilty", "Innocent", "Innocent", "Innocent"]);
 
       const sets = people.map((p, i) => [p, places[i], weapons[i], verdicts[i]]);
